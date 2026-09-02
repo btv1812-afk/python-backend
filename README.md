@@ -1,3 +1,5 @@
+![Build](https://github.com/kkkate123/python-backend/actions/workflows/docker-build.yaml/badge.svg)
+
 A simple Python backend application built with Flask.
 
 The application exposes REST endpoints and is containerized using Docker.

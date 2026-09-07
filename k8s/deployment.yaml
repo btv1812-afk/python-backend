@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: python-backend-container
-        image: kkkate123/python-backend:1.0.1
+        image: kkkate123/python-backend:1.0.2
         imagePullPolicy: Always
 
         ports:

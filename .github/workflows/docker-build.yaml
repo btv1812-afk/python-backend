@@ -71,9 +71,6 @@ jobs:
 
           git commit -m "Update application to ${{ steps.version.outputs.version }}"
 
-          git pushloyment.yaml
-          git commit -m "Update image to ${IMAGE_TAG}"
           git push
-
 
     

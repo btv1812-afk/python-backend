@@ -1,17 +1,45 @@
 name: Docker Build and Push
+
 on:
   push:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   build:
+    # Не запускаем workflow повторно,
+    # если commit сделан самим GitHub Actions
+    if: github.actor != 'github-actions[bot]'
+
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+        with:
+          fetch-depth: 0
+
+      - name: Calculate next version
+        id: version
+        run: |
+          CURRENT_VERSION=$(cat VERSION)
+
+          MAJOR=$(echo "$CURRENT_VERSION" | cut -d. -f1)
+          MINOR=$(echo "$CURRENT_VERSION" | cut -d. -f2)
+          PATCH=$(echo "$CURRENT_VERSION" | cut -d. -f3)
+
+          NEXT_PATCH=$((PATCH + 1))
+
+          NEXT_VERSION="$MAJOR.$MINOR.$NEXT_PATCH"
+
+          echo "version=$NEXT_VERSION" >> "$GITHUB_OUTPUT"
+
+          echo "Current version: $CURRENT_VERSION"
+          echo "Next version: $NEXT_VERSION"
+
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -24,8 +52,28 @@ jobs:
           context: .
           push: true
           tags: |
-             ${{ secrets.DOCKER_USERNAME }}/python-backend:1.0.0
-             ${{ secrets.DOCKER_USERNAME }}/python-backend:latest
-             
+            ${{ secrets.DOCKER_USERNAME }}/python-backend:${{ steps.version.outputs.version }}
+
+      - name: Update version
+        run: |
+          echo "${{ steps.version.outputs.version }}" > VERSION
+
+      - name: Update Kubernetes manifest
+        run: |
+          sed -i "s|python-backend:[0-9.]*|python-backend:${{ steps.version.outputs.version }}|" k8s/deployment.yaml
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add VERSION k8s/deployment.yaml
+
+          git commit -m "Update application to ${{ steps.version.outputs.version }}"
+
+          git pushloyment.yaml
+          git commit -m "Update image to ${IMAGE_TAG}"
+          git push
+
 
     

@@ -12,7 +12,7 @@ PORT = int(os.getenv('PORT', 8080))
 def home():
     return jsonify({
         'status': 'OK',
-        'message': "Python Backend is running",
+        'message': "Python Backend is сhanging and running v1",
     }), 200
 
 @app.route('/health', methods=['GET'])

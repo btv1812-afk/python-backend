@@ -16,8 +16,7 @@ spec:
     http:
       paths: 
       - path: /
-      - pathType: Prefix
-        
+        pathType: Prefix
         backend:
           service:
             name: python-backend-service

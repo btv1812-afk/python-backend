@@ -10,9 +10,11 @@ PORT = int(os.getenv('PORT', 8080))
 
 @app.route('/', methods=['GET'])
 def home():
+    pod_ip = os.getenv('POD_IP', 'Unknown')
     return jsonify({
         'status': 'OK',
         'message': "Python Backend is changing and running v2",
+        'pod_ip': pod_ip
     }), 200
 
 @app.route('/health', methods=['GET'])

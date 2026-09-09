@@ -25,6 +25,11 @@ spec:
       containers:
       - name: python-backend-container
         image: kkkate123/python-backend:1.0.2
+        env:
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
         imagePullPolicy: Always
 
         ports:

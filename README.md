@@ -44,7 +44,7 @@ python-backend/
 
 ---
 
-## Run Locally
+## Run Locally (optional for verifying)
 
 Create a virtual environment:
 

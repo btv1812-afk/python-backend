@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: python-backend-container
-        image: kkkate123/python-backend:1.0.6
+        image: kkkate123/python-backend:1.0.7
         env:
         - name: POD_IP
           valueFrom:
